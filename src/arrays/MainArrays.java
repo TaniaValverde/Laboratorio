@@ -23,14 +23,13 @@ public class MainArrays {
             vector[i] = randon;
 
         }
-        
-        int [] menorMayor = menorMayor(vector);
+
+        int[] menorMayor = menorMayor(vector);
         System.out.println(menorMayor.length);
         if (menorMayor != null && menorMayor.length > 1) {
             System.out.println("Mayor: " + menorMayor[0]);
             System.out.println("Menor: " + menorMayor[1]);
-        }
-        else{
+        } else {
             System.out.println("Vector No valido, tamanno menor al requerido");
         }
     }
@@ -59,7 +58,10 @@ public class MainArrays {
                 return menorMayor;
             }
         }
-
+ 
+        
+        
+         
         return numeros;
     }
 
