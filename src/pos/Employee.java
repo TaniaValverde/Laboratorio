@@ -115,7 +115,7 @@ public class Employee extends Person {
      */
     public void setEstado(Estado estado) {
         this.estado = estado;
-    }
+    } 
 
     @Override
     public String toString() {

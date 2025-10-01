@@ -28,8 +28,9 @@ public class POSMAIN {
             opc = Integer.parseInt(br.readLine());
 
             switch (opc) {
-                case 1 ->
+               case 1 ->
                    planilla[c] = crearEmpleado();
+                
                    
                 case 2 ->
                     mostrarPlanilla();
