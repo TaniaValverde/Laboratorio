@@ -18,7 +18,9 @@ public class Votante {
    private String primerApellido;
    private String segundoApellido;
 
-    public Votante(String cedula, String codPostal, String fechaVencimiento, String codElectoral, String nombreCompleto, String primerApellido, String segundoApellido) {
+    public Votante(String cedula, String codPostal, String fechaVencimiento, 
+            String codElectoral, String nombreCompleto, String primerApellido,
+            String segundoApellido) {
         this.cedula = cedula;
         this.codPostal = codPostal;
         this.fechaVencimiento = fechaVencimiento;
