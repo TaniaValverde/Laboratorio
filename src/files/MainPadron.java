@@ -53,6 +53,7 @@ public class MainPadron {
         } catch (IOException e) {
             System.out.println("Error general: " + e.getMessage());
         }
+       
     }
 
     /**
@@ -72,6 +73,8 @@ public class MainPadron {
             System.out.println("4) Guardar resultados filtrados en nuevo "
                     + "archivo");
             System.out.println("5) Mostrar apellidos únicos");
+            System.out.println("8) Contar personas por distrito");
+
             System.out.println("0) Salir");
             System.out.print("Seleccione una opción: ");
             opcion = leerEntero();
@@ -92,6 +95,11 @@ public class MainPadron {
                 case 5:
                     apellidosUnicos();
                     break;
+
+                case 8:
+                    contarPorDistrito(); // o contarPorDistritoPreciso();
+                    break;
+
                 case 0:
                     System.out.println("Programa finalizado.");
                     break;
@@ -165,19 +173,18 @@ public class MainPadron {
             String linea;
             while ((linea = br.readLine()) != null) {
                 if (linea.toUpperCase().contains(apellido)) {
-                   
-                    
+
                     String partes[] = linea.split(",");
-                    Votante votante =new  Votante(
-                            partes[0], 
+                    Votante votante = new Votante(
+                            partes[0],
                             partes[1],
-                            partes[3], 
-                            partes[4], 
+                            partes[3],
+                            partes[4],
                             partes[5],
                             partes[6],
                             partes[7]
                     );
-                                      
+
                     System.out.println(votante.getNombreCompletoApellidos());
                     encontrados++;
                 }
@@ -278,6 +285,32 @@ public class MainPadron {
         }
         return true;
     }
+    public static void contarPorDistrito() {
+    if (!archivoValido()) {
+        return; // Evita errores si no se ha seleccionado un archivo
+    }
+
+    System.out.print("Ingrese el código de distrito (ej. 607010): ");
+    String codigo = SC.nextLine().trim();
+
+    int contador = 0; // Contador de personas encontradas
+
+    try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
+        String linea;
+        while ((linea = br.readLine()) != null) {
+            // Si la línea contiene el código ingresado
+            if (linea.contains(codigo)) {
+                contador++;
+            }
+        }
+
+        System.out.println("Total de personas encontradas en el distrito " 
+                + codigo + ": " + contador);
+
+    } catch (IOException e) {
+        System.out.println("Error al leer el archivo: " + e.getMessage());
+    }
+}
 
     /**
      * Lee un número entero desde consola, validando que la entrada sea
@@ -295,4 +328,6 @@ public class MainPadron {
             }
         }
     }
+
+   
 }
