@@ -18,6 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * <li>Buscar registros por apellido</li>
  * <li>Guardar resultados filtrados en un nuevo archivo</li>
  * <li>Listar apellidos únicos encontrados</li>
+ * <li>Mostrar las primeras N líneas del archivo</li>
  * </ul>
  *
  * <p>
@@ -27,7 +28,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * </p>
  *
  * @author José Pablo Noguera
- * @version 1.0
+ * @version 1.1 (agregada opción 6)
  * @since Java 12
  */
 public class MainPadron {
@@ -53,7 +54,6 @@ public class MainPadron {
         } catch (IOException e) {
             System.out.println("Error general: " + e.getMessage());
         }
-       
     }
 
     /**
@@ -66,17 +66,16 @@ public class MainPadron {
     public static void menuPrincipal() throws IOException {
         int opcion;
         do {
-            System.out.println("\n=== MENÚ PADRÓN ELECTORAL ===");
+            System.out.println("\n=== MENU PADRON ELECTORAL ===");
             System.out.println("1) Seleccionar archivo con JFileChooser");
-            System.out.println("2) Mostrar cantidad de líneas");
+            System.out.println("2) Mostrar cantidad de lineas");
             System.out.println("3) Buscar por apellido");
-            System.out.println("4) Guardar resultados filtrados en nuevo "
-                    + "archivo");
-            System.out.println("5) Mostrar apellidos únicos");
+            System.out.println("4) Guardar resultados filtrados en nuevo archivo");
+            System.out.println("5) Mostrar apellidos unicos");
+            System.out.println("6) Mostrar las primeras N lineas");  // NUEVA OPCIÓN
             System.out.println("8) Contar personas por distrito");
-
             System.out.println("0) Salir");
-            System.out.print("Seleccione una opción: ");
+            System.out.print("Seleccione una opcion: ");
             opcion = leerEntero();
 
             switch (opcion) {
@@ -95,11 +94,12 @@ public class MainPadron {
                 case 5:
                     apellidosUnicos();
                     break;
-
-                case 8:
-                    contarPorDistrito(); // o contarPorDistritoPreciso();
+                case 6:
+                    mostrarPrimerasNLineas();  // LLAMADA A LA NUEVA FUNCIÓN
                     break;
-
+                case 8:
+                    contarPorDistrito();
+                    break;
                 case 0:
                     System.out.println("Programa finalizado.");
                     break;
@@ -117,14 +117,12 @@ public class MainPadron {
     public static void seleccionarArchivo() {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Seleccione el archivo ");
-        chooser.setFileFilter(new FileNameExtensionFilter("Archivos de texto",
-                "txt"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos de texto", "txt"));
 
         int resultado = chooser.showOpenDialog(null);
         if (resultado == JFileChooser.APPROVE_OPTION) {
             archivoSeleccionado = chooser.getSelectedFile();
-            System.out.println("Archivo seleccionado: "
-                    + archivoSeleccionado.getAbsolutePath());
+            System.out.println("Archivo seleccionado: " + archivoSeleccionado.getAbsolutePath());
         } else {
             System.out.println("No se seleccionó ningún archivo.");
         }
@@ -141,10 +139,7 @@ public class MainPadron {
         }
 
         int contador = 0;
-        try (
-                 BufferedReader br
-                = new BufferedReader(new FileReader(archivoSeleccionado))) {
-
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
             while (br.readLine() != null) {
                 contador++;
             }
@@ -168,23 +163,15 @@ public class MainPadron {
         String apellido = SC.nextLine().trim().toUpperCase();
         int encontrados = 0;
 
-        try ( BufferedReader br = new BufferedReader(
-                new FileReader(archivoSeleccionado))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 if (linea.toUpperCase().contains(apellido)) {
-
                     String partes[] = linea.split(",");
                     Votante votante = new Votante(
-                            partes[0],
-                            partes[1],
-                            partes[3],
-                            partes[4],
-                            partes[5],
-                            partes[6],
-                            partes[7]
+                            partes[0], partes[1], partes[2], partes[3],
+                            partes[4], partes[5], partes[6]
                     );
-
                     System.out.println(votante.getNombreCompletoApellidos());
                     encontrados++;
                 }
@@ -221,8 +208,8 @@ public class MainPadron {
         File destino = chooser.getSelectedFile();
         int count = 0;
 
-        try ( BufferedReader br = new BufferedReader(
-                new FileReader(archivoSeleccionado));  PrintWriter pw = new PrintWriter(new FileWriter(destino))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado));
+             PrintWriter pw = new PrintWriter(new FileWriter(destino))) {
 
             String linea;
             while ((linea = br.readLine()) != null) {
@@ -231,8 +218,7 @@ public class MainPadron {
                     count++;
                 }
             }
-            System.out.println("Archivo '" + destino.getName() + "' creado con "
-                    + count + " registros.");
+            System.out.println("Archivo '" + destino.getName() + "' creado con " + count + " registros.");
         } catch (IOException e) {
             System.out.println("Error al guardar: " + e.getMessage());
         }
@@ -250,8 +236,7 @@ public class MainPadron {
         Set<String> apellidos = new HashSet<>();
         int total = 0;
 
-        try ( BufferedReader br = new BufferedReader(
-                new FileReader(archivoSeleccionado))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 total++;
@@ -268,15 +253,74 @@ public class MainPadron {
     }
 
     /**
+     * MUESTRA LAS PRIMERAS N LÍNEAS DEL ARCHIVO
+     * El usuario ingresa cuántas líneas quiere ver.
+     */
+    public static void mostrarPrimerasNLineas() {
+        if (!archivoValido()) {
+            return;
+        }
+
+        System.out.print("Ingrese la cantidad de lineas a mostrar: ");
+        int n = leerEntero();
+
+        if (n <= 0) {
+            System.out.println("El numero debe ser mayor que 0.");
+            return;
+        }
+
+        System.out.println("\n--- PRIMERAS " + n + " LINEAS ---");
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
+            String linea;
+            int contador = 0;
+
+            while ((linea = br.readLine()) != null && contador < n) {
+                System.out.println((contador + 1) + ": " + linea);
+                contador++;
+            }
+
+            if (contador < n) {
+                System.out.println("\n(Advertencia: El archivo tiene solo " + contador + " líneas.)");
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Cuenta personas por código de distrito.
+     */
+    public static void contarPorDistrito() {
+        if (!archivoValido()) {
+            return;
+        }
+
+        System.out.print("Ingrese el código de distrito (ej. 607010): ");
+        String codigo = SC.nextLine().trim();
+
+        int contador = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                if (linea.contains(codigo)) {
+                    contador++;
+                }
+            }
+            System.out.println("Total de personas encontradas en el distrito " + codigo + ": " + contador);
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+    }
+
+    /**
      * Verifica si el archivo ha sido seleccionado y existe en el sistema.
      *
-     * @return {@code true} si el archivo es válido, {@code false} en caso
-     * contrario
+     * @return {@code true} si el archivo es válido, {@code false} en caso contrario
      */
     public static boolean archivoValido() {
         if (archivoSeleccionado == null) {
-            System.out.println("Primero debe seleccionar un archivo "
-                    + "(opción 1).");
+            System.out.println("Primero debe seleccionar un archivo (opción 1).");
             return false;
         }
         if (!archivoSeleccionado.exists()) {
@@ -285,36 +329,9 @@ public class MainPadron {
         }
         return true;
     }
-    public static void contarPorDistrito() {
-    if (!archivoValido()) {
-        return; // Evita errores si no se ha seleccionado un archivo
-    }
-
-    System.out.print("Ingrese el código de distrito (ej. 607010): ");
-    String codigo = SC.nextLine().trim();
-
-    int contador = 0; // Contador de personas encontradas
-
-    try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
-        String linea;
-        while ((linea = br.readLine()) != null) {
-            // Si la línea contiene el código ingresado
-            if (linea.contains(codigo)) {
-                contador++;
-            }
-        }
-
-        System.out.println("Total de personas encontradas en el distrito " 
-                + codigo + ": " + contador);
-
-    } catch (IOException e) {
-        System.out.println("Error al leer el archivo: " + e.getMessage());
-    }
-}
 
     /**
-     * Lee un número entero desde consola, validando que la entrada sea
-     * correcta.
+     * Lee un número entero desde consola, validando que la entrada sea correcta.
      *
      * @return el número entero ingresado por el usuario
      */
@@ -328,6 +345,4 @@ public class MainPadron {
             }
         }
     }
-
-   
 }
