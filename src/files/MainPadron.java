@@ -1,3 +1,10 @@
+/**
+ * Programa Laboratorio 4 - Manejo de archivos de texto en Java.
+ * 
+ * @author Tania Pérez, Anthuan Gonzales, Hugo Gurdian, Steven Ramirez
+ * @group Grupo #4 
+ * @date 3 de noviembre de 2025
+ */
 package files;
 
 import java.io.*;

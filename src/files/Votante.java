@@ -5,7 +5,9 @@
 package files;
 
 /**
- *
+ * Clase que representa un votante dentro del padrón electoral.
+ * Contiene la información personal básica de cada persona registrada.
+ * 
  * @author pablonoguera
  */
 public class Votante {
@@ -18,6 +20,17 @@ public class Votante {
    private String primerApellido;
    private String segundoApellido;
 
+    /**
+     * Crea un nuevo objeto {@code Votante} con todos los datos del padrón electoral.
+     *
+     * @param cedula número de identificación del votante
+     * @param codPostal código postal correspondiente al votante
+     * @param fechaVencimiento fecha de vencimiento de la cédula
+     * @param codElectoral código del distrito electoral
+     * @param nombreCompleto nombre completo del votante
+     * @param primerApellido primer apellido del votante
+     * @param segundoApellido segundo apellido del votante
+     */
     public Votante(String cedula, String codPostal, String fechaVencimiento, 
             String codElectoral, String nombreCompleto, String primerApellido,
             String segundoApellido) {
@@ -31,105 +44,108 @@ public class Votante {
     }
 
     /**
-     * @return the cedula
+     * @return la cédula del votante
      */
     public String getCedula() {
         return cedula;
     }
 
     /**
-     * @param cedula the cedula to set
+     * @param cedula asigna el número de cédula del votante
      */
     public void setCedula(String cedula) {
         this.cedula = cedula;
     }
 
     /**
-     * @return the codPostal
+     * @return el código postal del votante
      */
     public String getCodPostal() {
         return codPostal;
     }
 
     /**
-     * @param codPostal the codPostal to set
+     * @param codPostal asigna el código postal del votante
      */
     public void setCodPostal(String codPostal) {
         this.codPostal = codPostal;
     }
 
     /**
-     * @return the fechaVencimiento
+     * @return la fecha de vencimiento del documento
      */
     public String getFechaVencimiento() {
         return fechaVencimiento;
     }
 
     /**
-     * @param fechaVencimiento the fechaVencimiento to set
+     * @param fechaVencimiento asigna la fecha de vencimiento del documento
      */
     public void setFechaVencimiento(String fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
 
     /**
-     * @return the codElectoral
+     * @return el código electoral del votante
      */
     public String getCodElectoral() {
         return codElectoral;
     }
 
     /**
-     * @param codElectoral the codElectoral to set
+     * @param codElectoral asigna el código electoral del votante
      */
     public void setCodElectoral(String codElectoral) {
         this.codElectoral = codElectoral;
     }
 
     /**
-     * @return the nombreCompleto
+     * @return el nombre completo del votante
      */
     public String getNombreCompleto() {
         return nombreCompleto;
     }
     
-     /**
-     * @return the nombreCompleto
+    /**
+     * Devuelve el nombre completo del votante junto con sus apellidos.
+     *
+     * @return texto con cédula, nombre y apellidos del votante
      */
     public String getNombreCompletoApellidos() {
-        return cedula + " "+ nombreCompleto.trim() + " "+ primerApellido.trim() + " "+segundoApellido.trim() ;
+        return cedula + " " + nombreCompleto.trim() + " " 
+                + primerApellido.trim() + " " + segundoApellido.trim();
     }
 
     /**
-     * @param nombreCompleto the nombreCompleto to set
+     * @param nombreCompleto asigna el nombre completo del votante
      */
     public void setNombreCompleto(String nombreCompleto) {
         this.nombreCompleto = nombreCompleto;
     }
 
     /**
-     * @return the primerApellido
+     * @return el primer apellido del votante
      */
     public String getPrimerApellido() {
         return primerApellido;
     }
 
     /**
-     * @param primerApellido the primerApellido to set
+     * @param primerApellido asigna el primer apellido del votante
      */
     public void setPrimerApellido(String primerApellido) {
         this.primerApellido = primerApellido;
     }
 
     /**
-     * @return the segundoApellido
+     * @return el segundo apellido del votante
      */
     public String getSegundoApellido() {
         return segundoApellido;
     }
 
     /**
-     * @param segundoApellido the segundoApellido to set
+     * @param segundoApellido asigna el segundo apellido del votante
      */
     public void setSegundoApellido(String segundoApellido) {
         this.segundoApellido = segundoApellido;
@@ -137,10 +153,10 @@ public class Votante {
 
     @Override
     public String toString() {
-        return "Votante{" + "cedula=" + cedula + ", codPostal=" + codPostal + ", fechaVencimiento=" + fechaVencimiento + ", codElectoral=" + codElectoral + ", nombreCompleto=" + nombreCompleto + ", primerApellido=" + primerApellido + ", segundoApellido=" + segundoApellido + '}';
+        return "Votante{" + "cedula=" + cedula + ", codPostal=" + codPostal 
+                + ", fechaVencimiento=" + fechaVencimiento + ", codElectoral=" 
+                + codElectoral + ", nombreCompleto=" + nombreCompleto 
+                + ", primerApellido=" + primerApellido + ", segundoApellido=" 
+                + segundoApellido + '}';
     }
-   
-   
-   
-    
 }
