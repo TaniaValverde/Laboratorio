@@ -19,6 +19,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * <li>Guardar resultados filtrados en un nuevo archivo</li>
  * <li>Listar apellidos únicos encontrados</li>
  * <li>Mostrar las primeras N líneas del archivo</li>
+ * <li>Buscar por nombre completo</li>
+ * <li>Contar personas por distrito</li>
  * </ul>
  *
  * <p>
@@ -73,6 +75,7 @@ public class MainPadron {
             System.out.println("4) Guardar resultados filtrados en nuevo archivo");
             System.out.println("5) Mostrar apellidos unicos");
             System.out.println("6) Mostrar las primeras N lineas");  // NUEVA OPCIÓN
+            System.out.println("7) Buscar por nombre completo");
             System.out.println("8) Contar personas por distrito");
             System.out.println("0) Salir");
             System.out.print("Seleccione una opcion: ");
@@ -96,6 +99,9 @@ public class MainPadron {
                     break;
                 case 6:
                     mostrarPrimerasNLineas();  // LLAMADA A LA NUEVA FUNCIÓN
+                    break;
+                case 7:
+                    buscarNombreCompleto();  // NUEVA OPCIÓN
                     break;
                 case 8:
                     contarPorDistrito();
@@ -253,8 +259,8 @@ public class MainPadron {
     }
 
     /**
-     * MUESTRA LAS PRIMERAS N LÍNEAS DEL ARCHIVO
-     * El usuario ingresa cuántas líneas quiere ver.
+     * Muestra las primeras N líneas del archivo.
+     * <p>El usuario ingresa cuántas líneas desea visualizar.</p>
      */
     public static void mostrarPrimerasNLineas() {
         if (!archivoValido()) {
@@ -288,7 +294,61 @@ public class MainPadron {
     }
 
     /**
-     * Cuenta personas por código de distrito.
+     * Opción 7 - Buscar por nombre completo.
+     * <p>
+     * Busca líneas que contengan todas las palabras del nombre ingresado.
+     * Ejemplo: "Maria Ferreto" encontrará "MARIA LUISA FERRETO".
+     * </p>
+     */
+    public static void buscarNombreCompleto() {
+        if (!archivoValido()) {
+            System.out.println("Primero debe seleccionar un archivo válido.");
+            return;
+        }
+
+        System.out.print("Ingrese nombre completo a buscar: ");
+        String nombreCompleto = SC.nextLine().trim().toUpperCase();
+        int encontrados = 0;
+
+        // Separar el nombre en palabras (ej: "MARIA FERRETO" -> ["MARIA", "FERRETO"])
+        String[] palabras = nombreCompleto.split(" ");
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                // Convertir toda la línea a mayúsculas
+                String texto = linea.toUpperCase();
+
+                // Verificar si todas las palabras están en la línea
+                boolean coincide = true;
+                for (String palabra : palabras) {
+                    if (!texto.contains(palabra)) {
+                        coincide = false;
+                        break;
+                    }
+                }
+
+                if (coincide) {
+                    System.out.println(linea);
+                    encontrados++;
+                }
+            }
+
+            if (encontrados == 0) {
+                System.out.println("No se encontraron coincidencias para: " + nombreCompleto);
+            } else {
+                System.out.println("Coincidencias encontradas: " + encontrados);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error al buscar: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Opción 8 - Cuenta cuántas personas pertenecen a un distrito específico.
+     * <p>Se solicita al usuario el código de distrito y se cuentan los registros
+     * que lo contienen.</p>
      */
     public static void contarPorDistrito() {
         if (!archivoValido()) {
